@@ -4,7 +4,7 @@ Research services and a research workspace for turning questions into evidence.
 
 ## Stack
 - Next.js 15 Pages Router, React 19 and TypeScript
-- Static export for deployment
+- Vercel-ready full-stack deployment (server routes enabled)
 - White and purple visual system
 - PWA manifest and service-worker shell
 - Searchable research library with pre-rendered article pages
@@ -17,11 +17,11 @@ npm run dev
 
 ## Production checks
 ```bash
-npm run typecheck
 npm run build
+npm run typecheck
 ``
 
-The build uses Next.js static export. The output is written to `out/`. In Vercel, use the Next.js framework preset and the repository's default build settings unless deployment validation indicates otherwise.
+Deploy as a standard Next.js application on Vercel. Do not set the output directory to `out/`; server routes are part of the intended architecture.
 
 ## Public routes
 - `/` Home and the ASK → DESIGN → COLLECT → ANALYZE → ACT story
@@ -29,11 +29,12 @@ The build uses Next.js static export. The output is written to `out/`. In Vercel
 - `/services/` Capabilities
 - `/blog/` Searchable Research Library
 - `/blog/[slug]/` Pre-rendered research articles
-- `/start/` Research intake; prepares an email for the visitor to review and send
+- `/start/` Research intake; currently prepares an email for the visitor to review and send
 - `/contact/` Contact information
 - `/login/` Workspace access information
 - `/signup/` Workspace request information
 - `/dashboard/` Workspace interface preview
+- `/api/health` Runtime health endpoint
 
 ## Production status
 The public pages and visual shell are in place. Secure authentication, persistent client/project records, document storage, messaging, payments and an admin content editor still need to be connected before the workspace can be treated as a live multi-user platform. The dashboard currently contains illustrative preview data, not live client records.
