@@ -27,7 +27,7 @@ export default function Start() {
     <>
       <Head><title>Start a Research Project | Let’s Research</title><meta name="description" content="Share your research question with Let’s Research. We help shape the study, scope, methodology and next steps."/></Head>
       <div className="site-shell">
-        <header className="topbar"><Link href="/" className="brand"><span className="brand-mark">LR</span><span>LET’S RESEARCH</span></Link><Link href="/" className="back-link"><ArrowLeft size={16}/> Back</Link></header>
+        <header className="topbar"><Link href="/" className="brand"><img className="lr-wordmark" src="/lr-logo.svg" alt="Let’s Research" /></Link><Link href="/" className="back-link"><ArrowLeft size={16}/> Back</Link></header>
         <main className="intake-page">
           <div className="intake-intro"><span className="section-number">RESEARCH INTAKE</span><h1>Start with the question.</h1><p>Give us the context. We’ll help shape the research path, scope and next steps.</p><div className="intake-side"><strong>Engagements from $2,000</strong><span>Human-led · Evidence-first</span><span>Kenya · Global delivery</span></div></div>
           {emailReady ? <div className="success-panel"><CheckCircle2 size={42}/><span>One last step</span><h2>Your brief is ready to send.</h2><p>Your email app should open with the details filled in. Please send that email to submit your brief. We have not received it until you press Send in your email app.</p><a className="button button-primary" href="mailto:Victormurimiofficial@gmail.com?subject=Research%20brief"> <Mail size={17}/> Open email again</a><p><Link href="/">Back to Let’s Research <ArrowRight size={16}/></Link></p></div> : <form className="intake-form" onSubmit={submit}>
