@@ -74,10 +74,7 @@ export default function Home() {
 
       <div className="lr-site">
         <header className="lr-header">
-          <Link href="/" className="lr-brand">
-            <span className="lr-logo">LR</span>
-            <span>LET’S RESEARCH</span>
-          </Link>
+          <Link href="/" className="lr-brand"><img className="lr-wordmark" src="/lr-logo.svg" alt="Let’s Research" /></Link>
           <nav className={menu ? 'lr-nav open' : 'lr-nav'}>
             <Link href="/services">Capabilities</Link>
             <Link href="/blog">Research Library</Link>
@@ -121,6 +118,7 @@ export default function Home() {
 
             <div className="lr-story-panel">
               <div className="lr-story-visual">
+                <div className="lr-story-index-rail"><b>{current.no}</b><span>05</span></div>
                 {story.map((item, index) => (
                   <img key={item.no} alt={item.title} src={item.image} className={index === active ? 'story-image active' : 'story-image'} />
                 ))}
@@ -205,7 +203,7 @@ export default function Home() {
               <Link href="/dashboard" className="lr-button purple">Enter workspace <ArrowRight size={15} /></Link>
             </div>
             <div className="lr-dashboard-frame">
-              <div className="frame-top"><span className="lr-logo small">LR</span><span>Victor Research Workspace</span><b>LIVE</b></div>
+              <div className="frame-top"><img className="lr-mini-logo" src="/lr-icon.svg" alt="" /><span>Victor Research Workspace</span><b>LIVE</b></div>
               <div className="frame-body">
                 <aside><strong>WORKSPACE</strong><span className="selected">Overview</span><span>Projects</span><span>Research briefs</span><span>Fieldwork</span><span>Data & Analytics</span><span>Reports</span></aside>
                 <div className="frame-main">
@@ -244,7 +242,7 @@ export default function Home() {
         </main>
 
         <footer className="lr-footer">
-          <div><Link href="/" className="lr-brand"><span className="lr-logo">LR</span><span>LET’S RESEARCH</span></Link><p>Evidence for decisions that matter.</p></div>
+          <div><Link href="/" className="lr-brand"><img className="lr-wordmark" src="/lr-logo.svg" alt="Let’s Research" /></Link><p>Evidence for decisions that matter.</p></div>
           <div className="footer-links"><Link href="/services">Capabilities</Link><Link href="/blog">Research Library</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link><Link href="/login">Client login</Link></div>
           <div className="footer-contact"><a href="mailto:Victormurimiofficial@gmail.com">Victormurimiofficial@gmail.com</a><a href="tel:+254111944791">+254 111 944 791</a><span>Kenya · Global delivery</span></div>
         </footer>
