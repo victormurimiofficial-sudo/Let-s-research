@@ -1,105 +1,23 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { ArrowRight, Search } from 'lucide-react';
-
+import { useMemo, useState } from 'react';
 const posts = [
-  [
-    'Research Methods',
-    'How to choose the right research method for a business question',
-    'A practical framework for moving from a vague question to a defensible research approach.',
-    '8 min',
-  ],
-  [
-    'Market Research',
-    'What is market research and when does a company need it?',
-    'A clear guide to market research, customer evidence, competitor intelligence and decision support.',
-    '7 min',
-  ],
-  [
-    'Data & Analysis',
-    'Quantitative vs qualitative research: what is the difference?',
-    'Understand what each approach can answer, where they fit and when combining them makes sense.',
-    '6 min',
-  ],
-  [
-    'Academic Research',
-    'How to develop strong research objectives',
-    'A practical explanation of moving from a research problem to specific, measurable objectives.',
-    '5 min',
-  ],
-  [
-    'Sampling',
-    'Probability and non-probability sampling methods explained',
-    'How researchers choose participants and what each sampling approach means for interpretation.',
-    '9 min',
-  ],
-  [
-    'Health Research',
-    'What is a cross-sectional study?',
-    'A straightforward guide to cross-sectional designs, their uses, strengths and limitations.',
-    '7 min',
-  ],
-];
-
-export default function Blog() {
-  return (
-    <>
-      <Head>
-        <title>Research Library — Let’s Research</title>
-        <meta
-          name="description"
-          content="Research methods, market research, data analysis, health research and evidence guides from Let’s Research."
-        />
-      </Head>
-      <div className="site-shell">
-        <header className="topbar">
-          <Link href="/" className="brand">
-            <span className="brand-mark">LR</span>
-            <span>LET’S RESEARCH</span>
-          </Link>
-          <nav className="nav-links">
-            <Link href="/services">Capabilities</Link>
-            <Link href="/blog">Research Library</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/start" className="nav-cta">
-              Start research <ArrowRight size={15} />
-            </Link>
-          </nav>
-        </header>
-        <main className="inner-page">
-          <div className="page-hero library-hero">
-            <span className="section-number">RESEARCH LIBRARY</span>
-            <h1>Useful answers to serious research questions.</h1>
-            <p>
-              Guides and insights written for people who need to understand
-              research, data and evidence without unnecessary jargon.
-            </p>
-            <div className="search-box">
-              <Search size={18} />
-              <input
-                placeholder="Search the research library"
-                aria-label="Search research library"
-              />
-            </div>
-          </div>
-          <div className="blog-grid">
-            {posts.map(([cat, title, body, time], i) => (
-              <article className="blog-card" key={title}>
-                <div className="blog-number">0{i + 1}</div>
-                <span>{cat}</span>
-                <h2>{title}</h2>
-                <p>{body}</p>
-                <div className="blog-footer">
-                  <small>{time} read</small>
-                  <Link href="/blog">
-                    Read article <ArrowRight size={14} />
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </main>
-      </div>
-    </>
-  );
+{slug:'choose-the-right-research-method',category:'Research Methods',title:'How to choose the right research method for a business question',excerpt:'A practical framework for moving from a vague question to a defensible research approach.',time:'8 min'},
+{slug:'what-is-market-research',category:'Market Research',title:'What is market research and when does a company need it?',excerpt:'A clear guide to customer evidence, competitor intelligence and decision support.',time:'7 min'},
+{slug:'quantitative-vs-qualitative-research',category:'Data & Analysis',title:'Quantitative vs qualitative research: what is the difference?',excerpt:'Understand what each approach can answer, where they fit and when combining them makes sense.',time:'6 min'},
+{slug:'develop-strong-research-objectives',category:'Academic Research',title:'How to develop strong research objectives',excerpt:'Move from a research problem to specific objectives that guide methods and analysis.',time:'5 min'},
+{slug:'probability-and-non-probability-sampling',category:'Sampling',title:'Probability and non-probability sampling methods explained',excerpt:'How researchers choose participants and what each sampling approach means for interpretation.',time:'9 min'},
+{slug:'what-is-a-cross-sectional-study',category:'Health Research',title:'What is a cross-sectional study?',excerpt:'A practical guide to cross-sectional designs, uses, strengths and limitations.',time:'7 min'}];
+export default function Blog(){
+ const [query,setQuery]=useState(''); const [category,setCategory]=useState('All topics');
+ const categories=['All topics',...Array.from(new Set(posts.map(p=>p.category)))];
+ const filtered=useMemo(()=>posts.filter(p=>(category==='All topics'||p.category===category)&&(p.title+' '+p.excerpt+' '+p.category).toLowerCase().includes(query.trim().toLowerCase())),[query,category]);
+ return <><Head><title>Research Library | Let’s Research</title><meta name="description" content="Practical research methods, market research, sampling, health research and data analysis guides from Let’s Research."/></Head>
+ <div className="lr-site"><header className="lr-header"><Link href="/" className="lr-brand"><img className="lr-wordmark" src="/lr-logo.svg" alt="Let’s Research"/></Link><nav className="lr-nav"><Link href="/services">Capabilities</Link><Link href="/blog">Research Library</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link><Link href="/login" className="lr-signin">Sign in</Link><Link href="/start" className="lr-nav-cta">Start research <ArrowRight size={15}/></Link></nav></header>
+ <main className="lr-library-page"><section className="lr-library-hero"><span className="lr-index">THE RESEARCH LIBRARY / FIELD NOTES</span><h1>Useful answers to<br/><i>serious questions.</i></h1><p>Research methods, evidence guides and practical explanations for people who need to make sense of data and make informed decisions.</p>
+ <div className="lr-library-tools"><label className="lr-library-search"><Search size={17}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search methods, sampling, analysis…" aria-label="Search research library"/></label><label className="lr-category-select"><span>TOPIC</span><select value={category} onChange={e=>setCategory(e.target.value)} aria-label="Filter by topic">{categories.map(c=><option key={c}>{c}</option>)}</select></label></div><div className="lr-library-count">{filtered.length} {filtered.length===1?'ARTICLE':'ARTICLES'} <span>·</span> RESEARCH KNOWLEDGE, MADE CLEAR</div></section>
+ <section className="lr-article-grid" aria-live="polite">{filtered.map((p,i)=><article className="lr-article-card" key={p.slug}><div className="lr-article-card-top"><span>{String(i+1).padStart(2,'0')}</span><span>{p.category}</span></div><div className="lr-article-card-content"><h2>{p.title}</h2><p>{p.excerpt}</p></div><div className="lr-article-card-bottom"><span>{p.time} read</span><Link href={`/blog/${p.slug}`}>Read article <ArrowRight size={15}/></Link></div></article>)}{filtered.length===0&&<div className="lr-library-empty"><h2>No matching articles yet.</h2><p>Try another search or choose “All topics”.</p><button onClick={()=>{setQuery('');setCategory('All topics');}}>Clear filters</button></div>}</section>
+ <section className="lr-library-cta"><div><span className="lr-index">NEED HELP WITH A STUDY?</span><h2>Turn your question into a research plan.</h2></div><Link href="/start" className="lr-button purple">Start a research brief <ArrowRight size={15}/></Link></section></main>
+ <footer className="lr-footer"><div><Link href="/" className="lr-brand"><img className="lr-wordmark" src="/lr-logo.svg" alt="Let’s Research"/></Link><p>Evidence for decisions that matter.</p></div><div className="footer-links"><Link href="/services">Capabilities</Link><Link href="/blog">Research Library</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link></div><div className="footer-contact"><a href="mailto:Victormurimiofficial@gmail.com">Victormurimiofficial@gmail.com</a><a href="tel:+254111944791">+254 111 944 791</a><span>Kenya · Global delivery</span></div></footer></div></>;
 }
