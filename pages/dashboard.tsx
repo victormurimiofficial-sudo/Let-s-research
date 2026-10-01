@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { Activity, BarChart3, Bell, BookOpen, BriefcaseBusiness, ChevronDown, ClipboardList, FileBarChart, FileText, FolderKanban, ArrowRight, Home, Menu, MessageSquare, Plus, Settings, ShieldCheck, Upload, Users, WalletCards, X, Search, Send, CheckCircle2, Clock3, MoreHorizontal } from 'lucide-react';
-import { FormEvent, ReactNode, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from 'react';
 
 const ADMIN_EMAIL='Victormurimiofficial@gmail.com';
 const groups=[
@@ -43,7 +43,7 @@ export default function Dashboard(){
  const addProject=(e:FormEvent)=>{e.preventDefault();if(!newProject.title.trim())return;setProjects(v=>[{id:Date.now(),title:newProject.title,method:newProject.method,status:'Briefing',progress:8,due:newProject.due||'To confirm'},...v]);setNewProject({title:'',method:'Quantitative',due:''});setShowProjectForm(false);flash('Project created in your workspace.')};
  const addFinding=(e:FormEvent)=>{e.preventDefault();if(!newFinding.trim())return;setFindings(v=>[newFinding,...v]);setNewFinding('');flash('Finding added to the study.')};
  const sendMessage=(e:FormEvent)=>{e.preventDefault();if(!newMessage.trim())return;setMessages(v=>[...v,{id:Date.now(),from:'You',text:newMessage,time:'Now',mine:true}]);setNewMessage('');flash('Message added to the project thread.')};
- const upload=(e:React.ChangeEvent<HTMLInputElement>)=>{const f=e.target.files?.[0];if(f){setFiles(v=>[f.name,...v]);flash(f.name+' added to Files.')}};
+ const upload=(e:ChangeEvent<HTMLInputElement>)=>{const f=e.target.files?.[0];if(f){setFiles(v=>[f.name,...v]);flash(f.name+' added to Files.')}};
  const invite=(e:FormEvent)=>{e.preventDefault();const fd=new FormData(e.currentTarget);const email=String(fd.get('email')||'').trim();if(email){setTeam(v=>[...v,{name:email.split('@')[0],role:'Invited',email},]);e.currentTarget.reset();flash('Invitation prepared.')}}; 
  const install=async()=>{if(installPrompt){await installPrompt.prompt();setInstallPrompt(null)}};
  const moduleTitle=active==='Overview'?'Workspace overview':active;
