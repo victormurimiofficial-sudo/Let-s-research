@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Explore the editorial research journey",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "landing story panel",
+      "story stage navigation",
+      "research call to action"
+    ],
+    "description": "Verifies the landing page presents the main research journey as an interactive visual panel and exposes a project CTA.",
+    "steps": [
+      "Open the Let’s Research landing page",
+      "Select a different research stage in the journey panel",
+      "Select Start a research project"
+    ],
+    "expected": "The selected stage changes its image and copy, and the project intake page opens."
+  },
+  {
+    "name": "Navigate the mobile landing page",
+    "viewport": "mobile",
+    "covers": [
+      "responsive landing navigation",
+      "mobile story panel",
+      "mobile visual layout"
+    ],
+    "description": "Verifies the primary landing experience remains usable on a phone.",
+    "steps": [
+      "Open the landing page on a mobile viewport",
+      "Open the navigation menu",
+      "Close the menu and advance the research journey"
+    ],
+    "expected": "The menu opens and closes cleanly, and the story panel remains readable and interactive."
+  },
+  {
+    "name": "Open the research workspace",
+    "viewport": "desktop",
+    "covers": [
+      "dashboard shell",
+      "workspace navigation",
+      "project panels",
+      "research activity"
+    ],
+    "description": "Verifies the workspace presents its grouped navigation and core research panels.",
+    "steps": [
+      "Open the dashboard",
+      "Select Projects from the workspace navigation",
+      "Select Overview"
+    ],
+    "expected": "The dashboard navigation changes the visible module and Overview returns to the project, metrics, activity and research table panels."
+  },
+  {
+    "name": "Start research with required information",
+    "viewport": "mobile",
+    "covers": [
+      "research intake validation",
+      "research intake submission"
+    ],
+    "description": "Verifies the research intake flow prevents an empty submission and accepts a completed brief.",
+    "steps": [
+      "Open Start research",
+      "Submit the form without the required project question",
+      "Enter the required project information and submit"
+    ],
+    "expected": "Validation is shown for the missing required field, then a completed submission reaches the success state."
+  }
+]
