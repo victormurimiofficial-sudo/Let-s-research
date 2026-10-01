@@ -142,3 +142,13 @@
  .lr-hero-display{font-size:52px!important}
  .lr-hero-full-bottom{margin-top:19px}
 }
+
+/* Dashboard navigation follows the public Let’s Research journey */
+.lr-sidebar .lr-nav-group:first-child{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid #eee8f2}
+.lr-sidebar .lr-nav-group:first-child button{color:#5f5368}
+.lr-sidebar .lr-nav-group:first-child button:first-of-type{font-weight:800;color:var(--purple)}
+.lr-sidebar .admin-group{margin-top:10px;padding-top:18px;border-top:1px solid #eee8f2}
+@media(max-width:700px){
+ .lr-sidebar{width:min(310px,88vw);flex-basis:min(310px,88vw)}
+ .lr-sidebar .lr-nav-group:first-child{margin-bottom:18px}
+}
