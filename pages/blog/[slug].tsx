@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-type Section = { heading: string; paragraphs: string[]; bullets?: string[] };
+type Section = { heading: string; paragraphs?: string[]; bullets?: string[] };
 type Article = { slug: string; category: string; title: string; excerpt: string; minutes: string; updated: string; intro: string; sections: Section[]; takeaway: string };
 
 const articles: Article[] = [
