@@ -7,9 +7,11 @@ const stages = [
   {no:'01',label:'ASK',title:'What are we really trying to understand?',text:'We clarify what you need to understand, who the decision is for and what a useful answer needs to look like.',meta:'Research strategy',image:'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=2400&q=92'},
   {no:'02',label:'DESIGN',title:'What is the right way to find out?',text:'Method, population, sample, instruments and analysis are designed as one connected study.',meta:'Study design',image:'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=2400&q=92'},
   {no:'03',label:'COLLECT',title:'What evidence do we need to trust the answer?',text:'Fieldwork, interviews, surveys and secondary sources move through a structured process with a clear record of what has been collected.',meta:'Fieldwork',image:'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=2400&q=92'},
-  {no:'04',label:'ANALYZE',title:'What pattern actually matters?',text:'We clean, structure and interrogate evidence so the important pattern is easier to see and explain.',meta:'Data & analytics',image:'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2400&q=92'},
+  {no:'04',label:'ANALYZE',title:'What pattern actually matters?',text:'We clean, structure and interrogate evidence so the important pattern is easier to see and explain.',meta:'Data & analytics',image:'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=2400&q=92'},
   {no:'05',label:'ACT',title:'What should change next?',text:'Findings, reports and recommendations are shaped around the decision that started the project.',meta:'Findings & reports',image:'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=2400&q=92'}
 ];
+
+const heroStages = stages.slice(0,3);
 
 const capabilities=[
 ['01','Market research','Customers, competitors, demand, positioning and opportunity.'],
@@ -21,9 +23,9 @@ const capabilities=[
 ];
 
 export default function Home(){
- const [active,setActive]=useState(0); const [menu,setMenu]=useState(false);
- const current=stages[active];
- useEffect(()=>{const t=window.setInterval(()=>setActive(v=>(v+1)%stages.length),6500);return()=>window.clearInterval(t)},[]);
+ const [active,setActive]=useState(0); const [heroActive,setHeroActive]=useState(0); const [menu,setMenu]=useState(false);
+ const current=stages[active]; const heroCurrent=heroStages[heroActive];
+ useEffect(()=>{const t=window.setInterval(()=>setHeroActive(v=>(v+1)%heroStages.length),6500);return()=>window.clearInterval(t)},[]);
  return <>
  <Head><title>Let’s Research — Better questions. Stronger evidence.</title><meta name="description" content="Let’s Research helps organizations turn important questions into structured research, evidence and useful findings."/></Head>
  <div className="lr-site lr-home">
@@ -57,22 +59,22 @@ export default function Home(){
 
     <div className="lr-product-stage">
      <div className="lr-question-card">
-      <div className="lr-card-top"><span>THE QUESTION</span><b>{current.no}</b></div>
+      <div className="lr-card-top"><span>THE QUESTION</span><b>{heroCurrent.no}</b></div>
       <div className="lr-question-mark">?</div>
-      <h2>{current.title}</h2>
-      <p>{current.text}</p>
-      <div className="lr-card-footer"><span>{current.meta}</span><span>LET’S RESEARCH ↗</span></div>
+      <h2>{heroCurrent.title}</h2>
+      <p>{heroCurrent.text}</p>
+      <div className="lr-card-footer"><span>{heroCurrent.meta}</span><span>LET’S RESEARCH ↗</span></div>
      </div>
 
      <div className="lr-photo-card">
-      <img src={current.image} alt="Research team working together"/>
-      <div><span>{current.label}</span><b>FIELD NOTE / {current.no}</b></div>
+      <img src={heroCurrent.image} alt="Research team working together"/>
+      <div><span>{heroCurrent.label}</span><b>FIELD NOTE / {heroCurrent.no}</b></div>
      </div>
 
      <div className="lr-evidence-card">
       <div className="lr-evidence-head"><span>RESEARCH JOURNEY</span><b>LIVE</b></div>
-      <div className="lr-evidence-steps">{stages.map((s,i)=><button key={s.no} onClick={()=>setActive(i)} className={i===active?'active':''}><span>{s.no}</span><b>{s.label}</b></button>)}</div>
-      <div className="lr-evidence-bottom"><span>ASK</span><i></i><span>ACT</span><em>01 / 05</em></div>
+      <div className="lr-evidence-steps">{heroStages.map((s,i)=><button key={s.no} onClick={()=>setHeroActive(i)} className={i===heroActive?'active':''}><span>{s.no}</span><b>{s.label}</b></button>)}</div>
+      <div className="lr-evidence-bottom"><span>ASK</span><i></i><span>COLLECT</span><em>0{heroCurrent.no} / 03</em></div>
      </div>
 
      <div className="lr-mini-metric"><span>ACTIVE STUDY</span><strong>2,500</strong><small>target responses</small></div>
