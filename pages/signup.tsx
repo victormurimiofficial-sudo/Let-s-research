@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, LockKeyhole, ShieldCheck, Sparkles } from 'lucide-react';
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 
 const ADMIN_EMAIL = 'Victormurimiofficial@gmail.com';
 
