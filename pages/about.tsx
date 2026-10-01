@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 export default function About(){
   return <><Head><title>About — Let’s Research</title><meta name="description" content="Learn how Let’s Research connects research strategy, fieldwork, analysis and reporting into one clear journey."/></Head>
   <div className="lr-site">
-    <header className="lr-header"><Link href="/" className="lr-brand"><img className="lr-wordmark" src="/lr-logo.svg" alt="Let’s Research"/></Link><nav className="lr-nav"><Link href="/services">Capabilities</Link><Link href="/blog">Research Library</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link><Link href="/login" className="lr-signin">Sign in</Link><Link href="/start" className="lr-nav-cta">Start research <ArrowRight size={15}/></Link></nav></header>
+    <header className="lr-header"><Link href="/" className="lr-brand"><img className="lr-wordmark" src="/lr-logo.svg" alt="Let’s Research"/></Link><nav className="lr-nav"><Link href="/services">Capabilities</Link><Link href="/blog">Research Library</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link><Link href="/start" className="lr-nav-cta">Start research <ArrowRight size={15}/></Link></nav></header>
     <main>
       <section className="lr-story-section" style={{borderTop:0}}>
         <div className="lr-section-intro"><span className="lr-index">ABOUT / LET’S RESEARCH</span><div><h2>Research that moves from uncertainty to evidence.</h2><p>Let’s Research is a research company and digital workspace built around one simple idea: the process should be as clear as the answer.</p></div></div>
@@ -15,6 +15,6 @@ export default function About(){
         </div>
       </section>
     </main>
-    <footer className="lr-footer"><div><Link href="/" className="lr-brand"><img className="lr-wordmark" src="/lr-logo.svg" alt="Let’s Research"/></Link><p>Evidence for decisions that matter.</p></div><div className="footer-links"><Link href="/services">Capabilities</Link><Link href="/blog">Research Library</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link><Link href="/login">Client login</Link></div><div className="footer-contact"><a href="mailto:Victormurimiofficial@gmail.com">Victormurimiofficial@gmail.com</a><a href="tel:+254111944791">+254 111 944 791</a><span>Kenya · Global delivery</span></div></footer>
+    <footer className="lr-footer"><div><Link href="/" className="lr-brand"><img className="lr-wordmark" src="/lr-logo.svg" alt="Let’s Research"/></Link><p>Evidence for decisions that matter.</p></div><div className="footer-links"><Link href="/services">Capabilities</Link><Link href="/blog">Research Library</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link><Link href="/signup">Create account</Link></div><div className="footer-contact"><a href="mailto:Victormurimiofficial@gmail.com">Victormurimiofficial@gmail.com</a><a href="tel:+254111944791">+254 111 944 791</a><span>Kenya · Global delivery</span></div></footer>
   </div></>
 }
