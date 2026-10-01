@@ -40,8 +40,8 @@ export default function Home(){
    <div className="lr-hero-full-content">
     <div className="lr-hero-full-kicker"><span>LET’S RESEARCH</span><b>01 — 05</b></div>
     <div className="lr-hero-full-main">
-     <div><span className="lr-hero-stage">RESEARCH, FROM QUESTION TO EVIDENCE</span><h1>Better questions.<br/><i>Stronger evidence.</i></h1></div>
-     <div className="lr-hero-full-bottom"><p>Research for organizations that need to understand people, markets, systems and opportunities before making important decisions.</p><Link href="/start" className="lr-hero-circle">START A PROJECT <ArrowDownRight size={17}/></Link></div>
+     <div className="lr-hero-copy"><span className="lr-hero-stage">RESEARCH, FROM QUESTION TO EVIDENCE</span><h1 className="lr-hero-display"><span><b>Q</b>uestions worth <i>asking.</i></span><span><b>E</b>vidence worth <i>using.</i></span></h1></div>
+     <div className="lr-hero-full-bottom"><p>For decisions that deserve more than a guess. We turn important questions into clear evidence, findings and action.</p><Link href="/start" className="lr-hero-circle">START A PROJECT <ArrowDownRight size={17}/></Link></div>
     </div>
    </div>
    <div className="lr-hero-progress">{stages.map((s,i)=><button key={s.no} onClick={()=>setActive(i)} className={i===active?'active':''} aria-label={'Show '+s.label}><span>{s.no}</span><b>{s.label}</b></button>)}</div>
