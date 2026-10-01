@@ -1,149 +1,92 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { Activity, BarChart3, Bell, BookOpen, BriefcaseBusiness, ChevronDown, ClipboardList, FileBarChart, FileText, FolderKanban, Home, Menu, MessageSquare, Settings, ShieldCheck, Users, WalletCards, X, ArrowUpRight, Plus } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Activity, BarChart3, Bell, BookOpen, BriefcaseBusiness, ChevronDown, ClipboardList, FileBarChart, FileText, FolderKanban, Home, Menu, MessageSquare, Plus, Settings, ShieldCheck, Upload, Users, WalletCards, X, Search, Send, CheckCircle2, Clock3, MoreHorizontal } from 'lucide-react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 
-const navigation = [
-  { title: 'WORKSPACE', items: [['Overview', Home], ['Projects', FolderKanban], ['Research briefs', ClipboardList], ['Fieldwork', BriefcaseBusiness], ['Participants', Users]] },
-  { title: 'EVIDENCE', items: [['Data & Analytics', BarChart3], ['Findings', Activity], ['Reports', FileBarChart], ['Research Library', BookOpen]] },
-  { title: 'COLLABORATION', items: [['Messages', MessageSquare], ['Team', Users], ['Files', FileText]] },
-  { title: 'ACCOUNT', items: [['Billing', WalletCards], ['Security', ShieldCheck], ['Settings', Settings]] },
+const ADMIN_EMAIL='Victormurimiofficial@gmail.com';
+const groups=[
+ {title:'WORKSPACE',items:[['Overview',Home],['Projects',FolderKanban],['Research briefs',ClipboardList],['Fieldwork',BriefcaseBusiness],['Participants',Users]]},
+ {title:'EVIDENCE',items:[['Data & Analytics',BarChart3],['Findings',Activity],['Reports',FileBarChart],['Research Library',BookOpen]]},
+ {title:'COLLABORATION',items:[['Messages',MessageSquare],['Team',Users],['Files',FileText]]},
+ {title:'ACCOUNT',items:[['Billing',WalletCards],['Security',ShieldCheck],['Settings',Settings]]}
 ];
+const adminItems=[['Leads',ClipboardList],['Clients',Users],['Payments',WalletCards],['Content',BookOpen],['Analytics',BarChart3]];
 
-const activity = [
-  ['FIELDWORK', '18 new responses received', '12 min ago'],
-  ['ANALYSIS', 'Consumer Behaviour Study dataset updated', '48 min ago'],
-  ['REPORTS', 'Market Entry Report was reviewed', '2 hrs ago'],
-  ['TEAM', 'Aisha joined the Health Access project', 'Yesterday'],
-];
+type Project={id:number;title:string;method:string;status:string;progress:number;due:string};
+type Brief={id:number;title:string;type:string;status:string;updated:string};
+type Participant={id:number;name:string;study:string;status:string;location:string};
+type Message={id:number;from:string;text:string;time:string;mine?:boolean};
 
-const projects = [
-  ['Consumer Behaviour Study', 'Quantitative', 'In field', '72%', 'VM'],
-  ['Health Access Baseline', 'Mixed methods', 'Analysis', '54%', 'AK'],
-  ['Market Entry Study', 'Secondary + interviews', 'Design', '28%', 'VM'],
-];
+export default function Dashboard(){
+ const [open,setOpen]=useState(false); const [active,setActive]=useState('Overview'); const [profile,setProfile]=useState<{name:string;email:string;organization:string;admin?:boolean}|null>(null);
+ const [projects,setProjects]=useState<Project[]>([
+  {id:1,title:'Consumer Behaviour Study',method:'Quantitative',status:'In field',progress:72,due:'18 Oct'},
+  {id:2,title:'Health Access Baseline',method:'Mixed methods',status:'Analysis',progress:54,due:'26 Oct'},
+  {id:3,title:'Market Entry Study',method:'Interviews + desk research',status:'Design',progress:28,due:'04 Nov'}
+ ]);
+ const [briefs,setBriefs]=useState<Brief[]>([{id:1,title:'Consumer Behaviour Study',type:'Market research',status:'Approved',updated:'Today'},{id:2,title:'Health Access Baseline',type:'Health research',status:'In review',updated:'Yesterday'}]);
+ const [participants,setParticipants]=useState<Participant[]>([{id:1,name:'Participant 001',study:'Consumer Behaviour',status:'Complete',location:'Nairobi'},{id:2,name:'Participant 002',study:'Consumer Behaviour',status:'Complete',location:'Kiambu'},{id:3,name:'Participant 003',study:'Consumer Behaviour',status:'Pending',location:'Nakuru'}]);
+ const [messages,setMessages]=useState<Message[]>([{id:1,from:'Research Desk',text:'Your latest fieldwork batch has been received and is ready for review.',time:'10:42'}]);
+ const [newMessage,setNewMessage]=useState(''); const [showProjectForm,setShowProjectForm]=useState(false); const [notice,setNotice]=useState('');
+ const [newProject,setNewProject]=useState({title:'',method:'Quantitative',due:''});
+ const [newFinding,setNewFinding]=useState(''); const [findings,setFindings]=useState(['Awareness is highest among respondents aged 30–39.','Price sensitivity is the strongest stated barrier.']);
+ const [reports,setReports]=useState([{title:'Consumer Behaviour Study — Interim Report',status:'Client review',updated:'Today'},{title:'Health Access Baseline — Analysis Plan',status:'Internal review',updated:'Yesterday'}]);
+ const [files,setFiles]=useState<string[]>(['Research brief.pdf','Fieldwork protocol.docx','Interim findings.xlsx']);
+ const [team,setTeam]=useState([{name:'Victor Murimi',role:'Owner',email:ADMIN_EMAIL},{name:'Aisha K.',role:'Researcher',email:'aisha@research.team'}]);
+ const [installPrompt,setInstallPrompt]=useState<any>(null);
 
-export default function Dashboard() {
-  const [open, setOpen] = useState(false);
-  const [active, setActive] = useState('Overview');
-  const [installPrompt, setInstallPrompt] = useState<any>(null);
+ useEffect(()=>{try{const raw=localStorage.getItem('lr_profile');if(raw)setProfile(JSON.parse(raw));}catch{} const handler=(e:Event)=>{e.preventDefault();setInstallPrompt(e)};window.addEventListener('beforeinstallprompt',handler);return()=>window.removeEventListener('beforeinstallprompt',handler)},[]);
+ const admin=profile?.email?.toLowerCase()===ADMIN_EMAIL.toLowerCase();
+ const displayName=profile?.name?.split(' ')[0]||'there';
+ const choose=(item:string)=>{setActive(item);setOpen(false);setNotice('')};
+ const flash=(text:string)=>{setNotice(text);window.setTimeout(()=>setNotice(''),2600)};
+ const addProject=(e:FormEvent)=>{e.preventDefault();if(!newProject.title.trim())return;setProjects(v=>[{id:Date.now(),title:newProject.title,method:newProject.method,status:'Briefing',progress:8,due:newProject.due||'To confirm'},...v]);setNewProject({title:'',method:'Quantitative',due:''});setShowProjectForm(false);flash('Project created in your workspace.')};
+ const addFinding=(e:FormEvent)=>{e.preventDefault();if(!newFinding.trim())return;setFindings(v=>[newFinding,...v]);setNewFinding('');flash('Finding added to the study.')};
+ const sendMessage=(e:FormEvent)=>{e.preventDefault();if(!newMessage.trim())return;setMessages(v=>[...v,{id:Date.now(),from:'You',text:newMessage,time:'Now',mine:true}]);setNewMessage('');flash('Message added to the project thread.')};
+ const upload=(e:React.ChangeEvent<HTMLInputElement>)=>{const f=e.target.files?.[0];if(f){setFiles(v=>[f.name,...v]);flash(f.name+' added to Files.')}};
+ const invite=(e:FormEvent)=>{e.preventDefault();const fd=new FormData(e.currentTarget);const email=String(fd.get('email')||'').trim();if(email){setTeam(v=>[...v,{name:email.split('@')[0],role:'Invited',email},]);e.currentTarget.reset();flash('Invitation prepared.')}}; 
+ const install=async()=>{if(installPrompt){await installPrompt.prompt();setInstallPrompt(null)}};
+ const moduleTitle=active==='Overview'?'Workspace overview':active;
 
-  useEffect(() => {
-    const handler = (event: Event) => {
-      event.preventDefault();
-      setInstallPrompt(event);
-    };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
+ const renderOverview=()=> <div className="dash-module">
+  <div className="dash-hero"><div><span className="dash-eyebrow">CLIENT WORKSPACE / {profile?.organization||'YOUR ORGANIZATION'}</span><h1>Good afternoon, {displayName}.</h1><p>Everything currently moving across your research projects.</p></div><button className="dash-primary" onClick={()=>choose('Projects')}><Plus size={16}/> New project</button></div>
+  <div className="dash-metrics">{[['ACTIVE PROJECTS',projects.length,'Across current studies'],['RESPONSES','1,842','Fieldwork received'],['REPORTS',reports.length,'Available to review'],['TEAM',team.length,'People with access']].map(([label,value,sub])=><div className="dash-metric" key={String(label)}><span>{label}</span><strong>{value}</strong><small>{sub}</small></div>)}</div>
+  <div className="dash-grid-2"><section className="dash-card dash-feature"><div className="dash-card-head"><div><span>ACTIVE PROJECT</span><h2>{projects[0]?.title||'No project yet'}</h2></div><button onClick={()=>choose('Projects')}>Open <MoreHorizontal size={15}/></button></div><div className="project-meta"><span>{projects[0]?.method}</span><span>{projects[0]?.status}</span><span>Due {projects[0]?.due}</span></div><div className="dash-progress"><i style={{width:(projects[0]?.progress||0)+'%'}}/></div><div className="progress-label"><span>{projects[0]?.progress||0}% complete</span><span>Research journey</span></div></section><section className="dash-card"><div className="dash-card-head"><div><span>RECENT ACTIVITY</span><h2>Project pulse</h2></div></div><div className="activity-list"><div><b>FIELDWORK</b><span>18 new responses received</span><small>12 min ago</small></div><div><b>ANALYSIS</b><span>Dataset updated</span><small>48 min ago</small></div><div><b>REPORTS</b><span>Interim report reviewed</span><small>2 hrs ago</small></div></div></section></div>
+  <section className="dash-card"><div className="dash-card-head"><div><span>PROJECTS</span><h2>Research in motion</h2></div><button onClick={()=>choose('Projects')}>View all <ArrowRightIcon/></button></div><div className="project-list">{projects.map(p=><button key={p.id} onClick={()=>choose('Projects')} className="project-row"><div><strong>{p.title}</strong><span>{p.method}</span></div><b>{p.status}</b><em>{p.progress}%</em><span>Due {p.due}</span><ArrowRightIcon/></button>)}</div></section>
+ </div>;
 
-  const install = async () => {
-    if (!installPrompt) return;
-    await installPrompt.prompt();
-    setInstallPrompt(null);
-  };
+ const renderProjects=()=> <div className="dash-module"><div className="module-heading"><div><span className="dash-eyebrow">WORKSPACE / PROJECTS</span><h1>Your research projects.</h1><p>Every study has one place for its brief, evidence, analysis and outputs.</p></div><button className="dash-primary" onClick={()=>setShowProjectForm(v=>!v)}><Plus size={16}/> New project</button></div>{showProjectForm&&<form className="dash-form-card" onSubmit={addProject}><input required placeholder="Project name" value={newProject.title} onChange={e=>setNewProject({...newProject,title:e.target.value})}/><select value={newProject.method} onChange={e=>setNewProject({...newProject,method:e.target.value})}><option>Quantitative</option><option>Qualitative</option><option>Mixed methods</option><option>Secondary research</option></select><input placeholder="Due date" value={newProject.due} onChange={e=>setNewProject({...newProject,due:e.target.value})}/><button className="dash-primary">Create project</button></form>}<div className="project-cards">{projects.map(p=><article className="project-card" key={p.id}><div className="project-card-top"><span>{p.method}</span><b>{p.progress}%</b></div><h2>{p.title}</h2><p>{p.status} · Due {p.due}</p><div className="dash-progress"><i style={{width:p.progress+'%'}}/></div><div className="project-card-bottom"><span>Brief · Design · Fieldwork · Data · Reports</span><button onClick={()=>flash('Project workspace selected.')}>Open project <ArrowRightIcon/></button></div></article>)}</div></div>;
 
-  return (
-    <>
-      <Head><title>{active} — Let’s Research</title></Head>
-      <div className="lr-app">
-        <aside className={open ? 'lr-sidebar open' : 'lr-sidebar'}>
-          <div className="lr-side-brand">
-            <Link href="/" className="lr-brand"><span className="lr-logo">LR</span><span>LET’S RESEARCH</span></Link>
-            <button onClick={() => setOpen(false)}><X size={19} /></button>
-          </div>
-          <div className="lr-workspace-switch"><small>WORKSPACE</small><strong>Victor Research</strong><span>PRO</span><ChevronDown size={14} /></div>
-          <nav className="lr-side-nav">
-            {navigation.map((group) => (
-              <div className="lr-nav-group" key={group.title}>
-                <small>{group.title}</small>
-                {group.items.map(([label, Icon]) => {
-                  const I = Icon as typeof Home;
-                  return <button key={label as string} className={active === label ? 'active' : ''} onClick={() => { setActive(label as string); setOpen(false); }}><I size={16} /><span>{label as string}</span></button>;
-                })}
-              </div>
-            ))}
-          </nav>
-          <div className="lr-side-bottom">
-            <div className="lr-help"><small>RESEARCH DESK</small><strong>Need help with a project?</strong><Link href="/contact">Talk to the team <ArrowUpRight size={12} /></Link></div>
-            <Link href="/">Exit workspace</Link>
-          </div>
-        </aside>
+ const renderBriefs=()=> <ListModule eyebrow="WORKSPACE / RESEARCH BRIEFS" title="Briefs before builds." description="Turn a question into a clear research scope before fieldwork begins." action="New brief" onAction={()=>flash('New brief workflow is ready for the next step.')}><div className="brief-grid">{briefs.map(b=><article className="brief-card" key={b.id}><span>{b.type}</span><h2>{b.title}</h2><p>Question · objectives · population · geography · methodology · deliverables</p><footer><b>{b.status}</b><small>{b.updated}</small></footer></article>)}</div></ListModule>;
+ const renderFieldwork=()=> <ListModule eyebrow="WORKSPACE / FIELDWORK" title="Fieldwork, without the fog." description="See collection progress and what still needs attention." action="Add response" onAction={()=>{setParticipants(v=>[...v,{id:Date.now(),name:'Participant '+String(v.length+1).padStart(3,'0'),study:'Consumer Behaviour',status:'Pending',location:'Kenya'}]);flash('Participant added.') }}><div className="field-grid"><div className="dash-card"><span className="dash-eyebrow">COLLECTION</span><strong className="big-number">1,842</strong><p>of 2,500 target responses</p><div className="dash-progress"><i style={{width:'74%'}}/></div><div className="field-stats"><span><b>74%</b> complete</span><span><b>658</b> remaining</span></div></div><div className="dash-card"><span className="dash-eyebrow">QUALITY CHECKS</span><div className="check-row"><CheckCircle2/> Duplicate review <b>Clear</b></div><div className="check-row"><CheckCircle2/> Completion review <b>98%</b></div><div className="check-row"><Clock3/> Manual review <b>12</b></div></div></div></ListModule>;
+ const renderParticipants=()=> <ListModule eyebrow="WORKSPACE / PARTICIPANTS" title="Participant register." description="Track respondent status, study assignment and location." action="Add participant" onAction={()=>{setParticipants(v=>[...v,{id:Date.now(),name:'Participant '+String(v.length+1).padStart(3,'0'),study:'Current study',status:'Pending',location:'Kenya'}]);flash('Participant added.')}}><div className="data-list">{participants.map(p=><div className="data-row" key={p.id}><div><strong>{p.name}</strong><span>{p.study}</span></div><b>{p.status}</b><span>{p.location}</span><MoreHorizontal size={17}/></div>)}</div></ListModule>;
+ const renderData=()=> <ListModule eyebrow="EVIDENCE / DATA & ANALYTICS" title="Your evidence, ready to inspect." description="Upload working datasets and keep the analytical trail beside the study." action="Upload data" onAction={()=>document.getElementById('dash-upload')?.click()}><input id="dash-upload" type="file" hidden onChange={upload}/><div className="data-workspace"><div className="dash-card upload-card"><Upload size={25}/><h2>Drop a dataset here</h2><p>CSV, XLSX and other research files can be attached to the project workspace.</p><button onClick={()=>document.getElementById('dash-upload')?.click()}>Choose file</button></div><div className="dash-card"><span className="dash-eyebrow">VARIABLES</span><div className="variable-list"><span>Age · numeric</span><span>Gender · categorical</span><span>Location · categorical</span><span>Purchase frequency · ordinal</span><span>Awareness score · numeric</span></div></div></div><div className="file-strip">{files.slice(0,5).map(f=><span key={f}><FileText size={14}/>{f}</span>)}</div></ListModule>;
+ const renderFindings=()=> <ListModule eyebrow="EVIDENCE / FINDINGS" title="Build the evidence story." description="Keep important findings separate from raw data and ready for reporting." action="Add finding" onAction={()=>document.getElementById('finding-input')?.focus()}><form className="finding-add" onSubmit={addFinding}><input id="finding-input" value={newFinding} onChange={e=>setNewFinding(e.target.value)} placeholder="Write a finding backed by evidence…"/><button className="dash-primary"><Plus size={15}/> Add</button></form><div className="finding-list">{findings.map((f,i)=><article key={f}><span>0{i+1}</span><p>{f}</p><b>Evidence attached</b></article>)}</div></ListModule>;
+ const renderReports=()=> <ListModule eyebrow="EVIDENCE / REPORTS" title="Reports that move the work forward." description="Track draft, review and final research outputs." action="New report" onAction={()=>{setReports(v=>[{title:'New research report',status:'Draft',updated:'Just now'},...v]);flash('Report draft created.')}}><div className="report-list">{reports.map(r=><div className="report-row" key={r.title}><div><FileBarChart size={19}/><strong>{r.title}</strong></div><b>{r.status}</b><span>{r.updated}</span><ArrowRightIcon/></div>)}</div></ListModule>;
+ const renderLibrary=()=> <ListModule eyebrow="EVIDENCE / RESEARCH LIBRARY" title="Your research knowledge base." description="Published guidance and saved evidence, kept close to the work." action="Open public library" onAction={()=>window.location.href='/blog'}><div className="library-dash-grid">{['How to choose the right research method for a business question','Quantitative vs qualitative research: what is the difference?','Probability and non-probability sampling methods explained','How to develop strong research objectives'].map((x,i)=><Link href="/blog" className="library-dash-card" key={x}><span>0{i+1}</span><small>RESEARCH GUIDE</small><h2>{x}</h2><ArrowRightIcon/></Link>)}</div></ListModule>;
+ const renderMessages=()=> <ListModule eyebrow="COLLABORATION / MESSAGES" title="Keep the conversation with the work." description="Project messages stay beside the research rather than buried in email." action="New message" onAction={()=>document.getElementById('message-input')?.focus()}><div className="message-thread">{messages.map(m=><div className={m.mine?'message mine':'message'} key={m.id}><span>{m.from}</span><p>{m.text}</p><small>{m.time}</small></div>)}</div><form className="message-compose" onSubmit={sendMessage}><input id="message-input" value={newMessage} onChange={e=>setNewMessage(e.target.value)} placeholder="Write to the research team…"/><button><Send size={16}/></button></form></ListModule>;
+ const renderTeam=()=> <ListModule eyebrow="COLLABORATION / TEAM" title="The people behind the project." description="Keep project access and research roles visible." action="Invite member" onAction={()=>document.getElementById('team-email')?.focus()}><form className="invite-form" onSubmit={invite}><input id="team-email" name="email" type="email" required placeholder="colleague@organization.com"/><button className="dash-primary">Invite <Send size={14}/></button></form><div className="data-list">{team.map(m=><div className="data-row" key={m.email}><div><strong>{m.name}</strong><span>{m.email}</span></div><b>{m.role}</b><span>Workspace access</span></div>)}</div></ListModule>;
+ const renderFiles=()=> <ListModule eyebrow="COLLABORATION / FILES" title="One place for the working material." description="Briefs, protocols, datasets and reports stay attached to the workspace." action="Upload file" onAction={()=>document.getElementById('dash-upload')?.click()}><input id="dash-upload" type="file" hidden onChange={upload}/><div className="file-grid">{files.map(f=><div key={f}><FileText size={21}/><strong>{f}</strong><span>Available to project team</span><MoreHorizontal size={16}/></div>)}</div></ListModule>;
+ const renderBilling=()=> <ListModule eyebrow="ACCOUNT / BILLING" title="Clear commercial records." description="Quotes, invoices and project payments can be tracked here." action="Request invoice" onAction={()=>flash('Invoice request prepared for the research desk.')}><div className="billing-summary"><div><span>OUTSTANDING</span><strong>$2,000</strong><small>Minimum engagement</small></div><div><span>PAID</span><strong>$0</strong><small>No payments recorded yet</small></div><div><span>STATUS</span><strong>OPEN</strong><small>Awaiting project confirmation</small></div></div><div className="invoice-row"><FileText/><div><strong>Research engagement</strong><span>Quote · Minimum engagement</span></div><b>Pending</b></div></ListModule>;
+ const renderSecurity=()=> <ListModule eyebrow="ACCOUNT / SECURITY" title="Keep access simple for now." description="Secure authentication will be connected before passwords are stored or sessions become persistent."><div className="security-panel"><ShieldCheck size={27}/><h2>Workspace access is in transition.</h2><p>Your current browser workspace uses a local account profile. We intentionally do not store your password here. The next production layer will add proper authentication, sessions and role-based access.</p><div><span>Current account</span><b>{profile?.email||'Not created yet'}</b></div></div></ListModule>;
+ const renderSettings=()=> <ListModule eyebrow="ACCOUNT / SETTINGS" title="Make the workspace yours." description="Update the details shown across your workspace."><form className="settings-form" onSubmit={e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const next={name:String(fd.get('name')),email:String(fd.get('email')),organization:String(fd.get('organization')),admin};localStorage.setItem('lr_profile',JSON.stringify(next));setProfile(next);flash('Workspace profile saved.')}}><label>Name<input name="name" defaultValue={profile?.name||''} required/></label><label>Work email<input name="email" type="email" defaultValue={profile?.email||''} required/></label><label>Organization<input name="organization" defaultValue={profile?.organization||''}/></label><button className="dash-primary">Save changes</button></form></ListModule>;
 
-        <main className="lr-app-main">
-          <header className="lr-app-header">
-            <button className="lr-mobile-menu" onClick={() => setOpen(true)}><Menu size={20} /></button>
-            <div className="lr-breadcrumb"><span>Victor Research</span><b>/</b><strong>{active}</strong></div>
-            <div className="lr-search"><span>⌕</span><input placeholder="Search projects, reports, people..." /></div>
-            {installPrompt && <button className="lr-install" onClick={install}>Install workspace</button>}
-            <button className="lr-icon-button"><Bell size={17} /></button>
-            <div className="lr-avatar">VM</div>
-          </header>
+ const renderAdmin=()=> admin ? <ListModule eyebrow={'ADMIN / '+active.toUpperCase()} title={active==='Leads'?'Leads that need attention':active==='Clients'?'Client accounts':active==='Payments'?'Payment pipeline':active==='Content'?'Research content': 'Business analytics'} description="Admin controls are visible for the configured administrator account."><div className="admin-grid">{(active==='Leads'?['New market research enquiry','Health research brief','Feasibility study request','Academic analysis request']:active==='Clients'?['Victor Research · Active','Northstar Health · Review','Mavuno Foods · Scoping','Urban Mobility Lab · Active']:active==='Payments'?['INV-001 · $2,000 · Pending','INV-002 · $5,400 · Paid','INV-003 · $3,200 · Pending']:active==='Content'?['6 published research articles','2 drafts waiting for review','Research Library SEO metadata','Featured article rotation']:['Research enquiries · 14','Active projects · 4','Research responses · 1,842','Reports delivered · 12']).map((x,i)=><div key={x}><span>0{i+1}</span><strong>{x}</strong><ArrowRightIcon/></div>)}</div></ListModule>:<ListModule eyebrow="ADMIN" title="Administrator access required." description="The configured administrator account is the only profile that should see admin controls."/>;
 
-          <div className="lr-app-content">
-            {active === 'Overview' ? (
-              <>
-                <div className="lr-dashboard-title">
-                  <div><small>MONDAY · 12 OCTOBER</small><h1>Good afternoon, Victor.</h1><p>Your research workspace at a glance.</p></div>
-                  <Link href="/start" className="lr-app-button"><Plus size={15} /> New research</Link>
-                </div>
+ function renderActive(){
+  if(active==='Overview')return renderOverview(); if(active==='Projects')return renderProjects(); if(active==='Research briefs')return renderBriefs(); if(active==='Fieldwork')return renderFieldwork(); if(active==='Participants')return renderParticipants(); if(active==='Data & Analytics')return renderData(); if(active==='Findings')return renderFindings(); if(active==='Reports')return renderReports(); if(active==='Research Library')return renderLibrary(); if(active==='Messages')return renderMessages(); if(active==='Team')return renderTeam(); if(active==='Files')return renderFiles(); if(active==='Billing')return renderBilling(); if(active==='Security')return renderSecurity(); if(active==='Settings')return renderSettings(); return renderAdmin();
+ }
 
-                <section className="lr-project-feature">
-                  <div className="feature-main">
-                    <div className="lr-status">ACTIVE PROJECT</div>
-                    <h2>Consumer Behaviour Study</h2>
-                    <p>Understanding customer behaviour and decision factors across the target market.</p>
-                    <div className="feature-tags"><span>Quantitative</span><span>Kenya</span><span>Due 18 Oct</span></div>
-                    <Link href="/dashboard" className="lr-inline-link">Open project <ArrowUpRight size={14} /></Link>
-                  </div>
-                  <div className="feature-progress">
-                    <div><small>RESEARCH PROGRESS</small><b>72%</b></div>
-                    <div className="lr-progress"><span /></div>
-                    <p>Fieldwork is active · 1,842 responses</p>
-                  </div>
-                </section>
+ if(!profile)return <><Head><title>Create your workspace — Let’s Research</title></Head><div className="workspace-gate"><img src="/lr-logo.svg" alt="Let’s Research"/><span>CLIENT WORKSPACE</span><h1>Bring your research into one place.</h1><p>Create a workspace profile to explore projects, briefs, fieldwork, evidence, reports and collaboration.</p><Link href="/signup" className="dash-primary">Create account <Plus size={16}/></Link><Link href="/" className="workspace-back">Back to Let’s Research</Link></div></>;
 
-                <section className="lr-stat-strip">
-                  <div><small>ACTIVE PROJECTS</small><strong>04</strong><span>Across 3 research teams</span></div>
-                  <div><small>RESPONSES</small><strong>1,842</strong><span>+12.4% this week</span></div>
-                  <div><small>REPORTS</small><strong>12</strong><span>3 updated this month</span></div>
-                  <div><small>TEAM MEMBERS</small><strong>08</strong><span>2 currently online</span></div>
-                </section>
+ return <><Head><title>{moduleTitle} — Let’s Research</title></Head><div className="lr-app">
+  <aside className={open?'lr-sidebar open':'lr-sidebar'}><div className="lr-side-brand"><Link href="/" className="lr-brand"><img className="lr-wordmark" src="/lr-logo.svg" alt="Let’s Research"/></Link><button onClick={()=>setOpen(false)}><X size={19}/></button></div><div className="lr-workspace-switch"><small>WORKSPACE</small><strong>{profile.organization||'My Research'}</strong><span>{admin?'ADMIN':'CLIENT'}</span><ChevronDown size={14}/></div><nav className="lr-side-nav">{groups.map(g=><div className="lr-nav-group" key={g.title}><small>{g.title}</small>{g.items.map(([label,Icon])=>{const I=Icon as typeof Home;return <button key={String(label)} className={active===label?'active':''} onClick={()=>choose(String(label))}><I size={16}/><span>{String(label)}</span></button>})}</div>)}{admin&&<div className="lr-nav-group admin-group"><small>ADMIN</small>{adminItems.map(([label,Icon])=>{const I=Icon as typeof Home;return <button key={String(label)} className={active===label?'active':''} onClick={()=>choose(String(label))}><I size={16}/><span>{String(label)}</span></button>})}</div>}</nav><div className="lr-side-bottom"><div className="lr-help"><small>RESEARCH DESK</small><strong>Need help with a project?</strong><a href="mailto:Victormurimiofficial@gmail.com">Talk to the team <ArrowRightIcon/></a></div><Link href="/">Exit workspace</Link></div></aside>
+  <main className="lr-app-main"><header className="lr-app-header"><button className="lr-mobile-menu" onClick={()=>setOpen(true)}><Menu size={20}/></button><div className="lr-breadcrumb"><span>{profile.organization||'Workspace'}</span><b>/</b><strong>{active}</strong></div><div className="lr-search"><Search size={16}/><input placeholder="Search projects, reports, people…"/></div>{installPrompt&&<button className="lr-install" onClick={install}>Install app</button>}<button className="lr-icon-button" onClick={()=>flash('You are all caught up.') }><Bell size={17}/></button><div className="lr-avatar">{displayName.slice(0,2).toUpperCase()}</div></header><div className="lr-app-content">{notice&&<div className="dash-toast"><CheckCircle2 size={15}/>{notice}</div>}{renderActive()}</div></main>
+ </div></>;
+}
 
-                <section className="lr-dashboard-grid">
-                  <div className="lr-panel lr-chart-panel">
-                    <div className="lr-panel-head"><div><small>RESEARCH ACTIVITY</small><h2>Evidence collected</h2></div><span>Last 30 days</span></div>
-                    <div className="lr-chart"><div className="chart-line" /><div className="chart-bars">{[42,58,49,66,61,72,70,83,68,91,78,96,87,100,92,88,96,100].map((height, i) => <i key={i} style={{ height: height + '%' }} />)}</div></div>
-                    <div className="lr-chart-axis"><span>Sep 14</span><span>Sep 21</span><span>Sep 28</span><span>Oct 05</span><span>Oct 12</span></div>
-                  </div>
+function ArrowRightIcon(){return <ArrowRight size={15}/>}
 
-                  <div className="lr-panel">
-                    <div className="lr-panel-head"><div><small>RECENT ACTIVITY</small><h2>Project feed</h2></div></div>
-                    <div className="lr-activity">
-                      {activity.map(([type, text, time]) => <div key={text}><i /><div><small>{type}</small><strong>{text}</strong><span>{time}</span></div></div>)}
-                    </div>
-                  </div>
-                </section>
-
-                <section className="lr-panel lr-projects-panel">
-                  <div className="lr-panel-head"><div><small>PROJECTS</small><h2>Research in motion</h2></div><Link href="/start" className="lr-inline-link">New project <Plus size={13} /></Link></div>
-                  <div className="lr-project-table">
-                    <div className="table-heading"><span>PROJECT</span><span>METHOD</span><span>STATUS</span><span>PROGRESS</span><span>OWNER</span></div>
-                    {projects.map((row) => <div className="table-project" key={row[0]}><strong>{row[0]}</strong><span>{row[1]}</span><b>{row[2]}</b><span>{row[3]}</span><em>{row[4]}</em></div>)}
-                  </div>
-                </section>
-              </>
-            ) : (
-              <section className="lr-module">
-                <div className="lr-module-number">WORKSPACE MODULE</div>
-                <h1>{active}</h1>
-                <p>This section is already part of the workspace architecture. Its dedicated workflow will be built on the same project context, permissions and evidence model.</p>
-                <div className="lr-module-panels"><div><small>STATUS</small><strong>Ready for build</strong></div><div><small>ACCESS</small><strong>Workspace team</strong></div><div><small>PROJECT CONTEXT</small><strong>Connected</strong></div></div>
-              </section>
-            )}
-          </div>
-        </main>
-      </div>
-    </>
-  );
+function ListModule({eyebrow,title,description,action,onAction,children}:{eyebrow:string;title:string;description:string;action?:string;onAction?:()=>void;children?:React.ReactNode}){
+ return <div className="dash-module"><div className="module-heading"><div><span className="dash-eyebrow">{eyebrow}</span><h1>{title}</h1><p>{description}</p></div>{action&&<button className="dash-primary" onClick={onAction}><Plus size={16}/>{action}</button>}</div>{children}</div>
 }
