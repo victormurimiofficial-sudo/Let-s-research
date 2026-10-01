@@ -35,8 +35,9 @@ export default function Home(){
     <nav>
      <Link href="/services">Capabilities</Link>
      <Link href="/blog">Research Library</Link>
-     <Link href="/about">About</Link>
      <Link href="/contact">Contact</Link>
+     <Link href="/about">About</Link>
+     <Link href="/login" className="lr-nav-signin">SIGN IN</Link>
     </nav>
     <div className="lr-product-nav-actions">
      <a href="mailto:Victormurimiofficial@gmail.com">SUPPORT</a>
@@ -46,8 +47,30 @@ export default function Home(){
    </header>
 
    {menu&&<div className="lr-product-mobile-menu">
-    <Link href="/services">Capabilities</Link><Link href="/blog">Research Library</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link><Link href="/signup">Create account <ArrowRight size={15}/></Link>
+    <Link href="/services">Capabilities</Link>
+    <Link href="/blog">Research Library</Link>
+    <Link href="/contact">Contact</Link>
+    <Link href="/about">About</Link>
+    <Link href="/login">Sign in</Link>
+    <Link href="/signup">Create account <ArrowRight size={15}/></Link>
    </div>}
+
+   <div className="lr-mobile-hero">
+    <img src={heroCurrent.image} alt="People working together on research"/>
+    <div className="lr-mobile-hero-shade"/>
+    <div className="lr-mobile-hero-content">
+     <div className="lr-mobile-hero-kicker"><span>LET’S RESEARCH</span><b>{heroCurrent.no} / 03</b></div>
+     <h1 className="lr-mobile-hero-title"><span><b>B</b>etter <i>questions.</i></span><span><b>B</b>etter <i>evidence.</i></span></h1>
+     <p>Research that turns important questions into evidence people can use.</p>
+     <div className="lr-mobile-hero-actions">
+      <Link href="/start">Start with a question <ArrowRight size={15}/></Link>
+      <Link href="/signup">Create account <ArrowRight size={15}/></Link>
+     </div>
+     <div className="lr-mobile-hero-stages">
+      {heroStages.map((s,i)=><button key={s.no} onClick={()=>setHeroActive(i)} className={i===heroActive?'active':''} aria-label={s.label}><span>{s.no}</span><b>{s.label}</b></button>)}
+     </div>
+    </div>
+   </div>
 
    <div className="lr-product-hero-grid">
     <div className="lr-product-copy">
