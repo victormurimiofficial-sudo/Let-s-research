@@ -116,7 +116,7 @@ export default function ResearchArticle({ article }: { article: Article | null }
       <Head>
         <title>{article.title} | Let’s Research</title>
         <meta name="description" content={article.excerpt} />
-        <meta property="og:type" content="article" />
+        <meta property="og:type" content="article" />\n        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Article", headline: article.title, description: article.excerpt, datePublished: article.updated, dateModified: article.updated, author: { "@type": "Organization", name: "Let’s Research" }, publisher: { "@type": "Organization", name: "Let’s Research" } }) }} />
         <meta property="og:title" content={article.title} />
         <meta property="og:description" content={article.excerpt} />
         <meta property="article:published_time" content={article.updated} />
