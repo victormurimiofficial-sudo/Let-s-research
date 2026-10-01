@@ -27,24 +27,62 @@ export default function Home(){
  return <>
  <Head><title>Let’s Research — Better questions. Stronger evidence.</title><meta name="description" content="Let’s Research helps organizations turn important questions into structured research, evidence and useful findings."/></Head>
  <div className="lr-site lr-home">
-  <section className="lr-hero-full">
-   <img className="lr-hero-full-image" src={current.image} alt="Researchers working together"/>
-   <div className="lr-hero-full-shade"/>
-   <header className="lr-hero-nav">
-    <Link href="/services" className="lr-hero-side-link">CAPABILITIES</Link>
-    <Link href="/" className="lr-hero-centered-logo"><img src="/lr-logo.svg" alt="Let’s Research"/></Link>
-    <div className="lr-hero-right"><a href="mailto:Victormurimiofficial@gmail.com">SUPPORT</a><Link href="/signup" className="lr-hero-start">CREATE ACCOUNT <ArrowRight size={13}/></Link></div>
+  <section className="lr-product-hero">
+   <header className="lr-product-nav">
+    <Link href="/" className="lr-product-logo"><img src="/lr-logo.svg" alt="Let’s Research"/></Link>
+    <nav>
+     <Link href="/services">Capabilities</Link>
+     <Link href="/blog">Research Library</Link>
+     <Link href="/about">About</Link>
+     <Link href="/contact">Contact</Link>
+    </nav>
+    <div className="lr-product-nav-actions">
+     <a href="mailto:Victormurimiofficial@gmail.com">SUPPORT</a>
+     <Link href="/signup" className="lr-product-account">CREATE ACCOUNT <ArrowRight size={13}/></Link>
+    </div>
     <button className="lr-menu" onClick={()=>setMenu(!menu)} aria-label="Open navigation">{menu?<X size={21}/>:<Menu size={21}/>}</button>
    </header>
-   {menu&&<div className="lr-hero-mobile-menu"><Link href="/services">Capabilities</Link><Link href="/blog">Research Library</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link><Link href="/signup">Create account <ArrowRight size={15}/></Link></div>}
-   <div className="lr-hero-full-content">
-    <div className="lr-hero-full-kicker"><span>LET’S RESEARCH</span><b>01 — 05</b></div>
-    <div className="lr-hero-full-main">
-     <div className="lr-hero-copy"><span className="lr-hero-stage">RESEARCH, FROM QUESTION TO EVIDENCE</span><h1 className="lr-hero-display"><span><b>Q</b>uestions worth <i>asking.</i></span><span><b>E</b>vidence worth <i>using.</i></span></h1></div>
-     <div className="lr-hero-full-bottom"><p>For decisions that deserve more than a guess. We turn important questions into clear evidence, findings and action.</p><Link href="/start" className="lr-hero-circle">START A PROJECT <ArrowDownRight size={17}/></Link></div>
+
+   {menu&&<div className="lr-product-mobile-menu">
+    <Link href="/services">Capabilities</Link><Link href="/blog">Research Library</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link><Link href="/signup">Create account <ArrowRight size={15}/></Link>
+   </div>}
+
+   <div className="lr-product-hero-grid">
+    <div className="lr-product-copy">
+     <div className="lr-product-kicker"><span>RESEARCH, DESIGNED AROUND THE QUESTION</span><b>01 — 05</b></div>
+     <h1 className="lr-product-title"><span><b>B</b>etter <i>questions.</i></span><span><b>B</b>etter <i>evidence.</i></span></h1>
+     <p className="lr-product-lead">What do your customers really need? Where is demand moving? What should you change next?</p>
+     <div className="lr-product-actions"><Link href="/start" className="lr-product-primary">Start with a question <ArrowRight size={15}/></Link><span>Minimum research engagement <strong>$2,000</strong></span></div>
+    </div>
+
+    <div className="lr-product-stage">
+     <div className="lr-question-card">
+      <div className="lr-card-top"><span>THE QUESTION</span><b>{current.no}</b></div>
+      <div className="lr-question-mark">?</div>
+      <h2>{current.title.replace('.', '?')}</h2>
+      <p>{current.text}</p>
+      <div className="lr-card-footer"><span>{current.meta}</span><span>LET’S RESEARCH ↗</span></div>
+     </div>
+
+     <div className="lr-photo-card">
+      <img src={current.image} alt="Research team working together"/>
+      <div><span>{current.label}</span><b>FIELD NOTE / {current.no}</b></div>
+     </div>
+
+     <div className="lr-evidence-card">
+      <div className="lr-evidence-head"><span>RESEARCH JOURNEY</span><b>LIVE</b></div>
+      <div className="lr-evidence-steps">{stages.map((s,i)=><button key={s.no} onClick={()=>setActive(i)} className={i===active?'active':''}><span>{s.no}</span><b>{s.label}</b></button>)}</div>
+      <div className="lr-evidence-bottom"><span>ASK</span><i></i><span>ACT</span><em>01 / 05</em></div>
+     </div>
+
+     <div className="lr-mini-metric"><span>ACTIVE STUDY</span><strong>2,500</strong><small>target responses</small></div>
     </div>
    </div>
-   <div className="lr-hero-progress">{stages.map((s,i)=><button key={s.no} onClick={()=>setActive(i)} className={i===active?'active':''} aria-label={'Show '+s.label}><span>{s.no}</span><b>{s.label}</b></button>)}</div>
+
+   <div className="lr-product-bottom">
+    <span>LET’S RESEARCH / EVIDENCE FOR DECISIONS THAT MATTER</span>
+    <span>SCROLL TO EXPLORE <ArrowDownRight size={14}/></span>
+   </div>
   </section>
 
   <main>
