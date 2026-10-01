@@ -4,11 +4,11 @@ import { ArrowDownRight, ArrowRight, Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const stages = [
-  {no:'01',label:'ASK',title:'Start with the question.',text:'We clarify what you need to understand, who the decision is for and what a useful answer needs to look like.',meta:'Research strategy',image:'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=2400&q=92'},
-  {no:'02',label:'DESIGN',title:'Build the study around the decision.',text:'Method, population, sample, instruments and analysis are designed as one connected study.',meta:'Study design',image:'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=2400&q=92'},
-  {no:'03',label:'COLLECT',title:'Bring the evidence together.',text:'Fieldwork, interviews, surveys and secondary sources move through a structured process with a clear record of what has been collected.',meta:'Fieldwork',image:'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=2400&q=92'},
-  {no:'04',label:'ANALYZE',title:'Find the signal inside the data.',text:'We clean, structure and interrogate evidence so the important pattern is easier to see and explain.',meta:'Data & analytics',image:'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2400&q=92'},
-  {no:'05',label:'ACT',title:'Finish with something useful.',text:'Findings, reports and recommendations are shaped around the decision that started the project.',meta:'Findings & reports',image:'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=2400&q=92'}
+  {no:'01',label:'ASK',title:'What are we really trying to understand?',text:'We clarify what you need to understand, who the decision is for and what a useful answer needs to look like.',meta:'Research strategy',image:'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=2400&q=92'},
+  {no:'02',label:'DESIGN',title:'What is the right way to find out?',text:'Method, population, sample, instruments and analysis are designed as one connected study.',meta:'Study design',image:'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=2400&q=92'},
+  {no:'03',label:'COLLECT',title:'What evidence do we need to trust the answer?',text:'Fieldwork, interviews, surveys and secondary sources move through a structured process with a clear record of what has been collected.',meta:'Fieldwork',image:'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=2400&q=92'},
+  {no:'04',label:'ANALYZE',title:'What pattern actually matters?',text:'We clean, structure and interrogate evidence so the important pattern is easier to see and explain.',meta:'Data & analytics',image:'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2400&q=92'},
+  {no:'05',label:'ACT',title:'What should change next?',text:'Findings, reports and recommendations are shaped around the decision that started the project.',meta:'Findings & reports',image:'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=2400&q=92'}
 ];
 
 const capabilities=[
@@ -59,7 +59,7 @@ export default function Home(){
      <div className="lr-question-card">
       <div className="lr-card-top"><span>THE QUESTION</span><b>{current.no}</b></div>
       <div className="lr-question-mark">?</div>
-      <h2>{current.title.replace('.', '?')}</h2>
+      <h2>{current.title}</h2>
       <p>{current.text}</p>
       <div className="lr-card-footer"><span>{current.meta}</span><span>LET’S RESEARCH ↗</span></div>
      </div>
